@@ -129,6 +129,25 @@ io.on("connection", (socket) => {
       console.log(`🚪 ${socket.id} leaving room ${roomId} on disconnect.`);
       io.to(roomId).emit("stop-recording"); // broadcast to everyone in the room
       delete rooms[socket.id]; // Remove from our custom room tracking
+
+        // 🔁 Trigger merging after slight delay (to let final chunks upload)
+        setTimeout(() => {
+            const { exec } = require("child_process");
+            const mergeScript = path.join(__dirname, "..", "mergeRecordings.js");
+
+            const cmd = `node "${mergeScript}" "${roomId}"`;
+
+            console.log(`🛠️ Running merge script: ${cmd}`);
+            exec(cmd, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`❌ Merge script error: ${error.message}`);
+                return;
+            }
+            if (stderr) console.warn(`⚠️ Merge stderr: ${stderr}`);
+            console.log(`✅ Merge completed:\n${stdout}`);
+            });
+        }, 8000); // wait 8 seconds to ensure last chunk uploads
+
     }
   });
 
