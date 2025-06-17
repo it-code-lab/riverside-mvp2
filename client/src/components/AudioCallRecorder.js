@@ -16,6 +16,7 @@ const AudioCallRecorder = () => {
         return 'room-' + Math.random().toString(36).substring(2, 10);
     };
   const [roomId, setRoomId] = useState(generateRoomId());
+  const [userName, setUserName] = useState("");
   const [joined, setJoined] = useState(false);
   const [peerInitialized, setPeerInitialized] = useState(false); // New state to track peer setup
 
@@ -162,14 +163,21 @@ const AudioCallRecorder = () => {
       return;
     }
     const audioOnlyStream = new MediaStream(mediaStream.current.getAudioTracks());
-    const recorder = new MediaRecorder(audioOnlyStream);
+    // const recorder = new MediaRecorder(audioOnlyStream);
 
+    const recorder = new MediaRecorder(audioOnlyStream, {
+        mimeType: 'audio/webm; codecs=opus',
+        audioBitsPerSecond: 128000
+    });
     setElapsedTime(0);
     timerRef.current = setInterval(() => {
     setElapsedTime(prev => prev + 1);
     }, 1000);
 
     recorder.ondataavailable = (e) => {
+      const blob = e.data;
+      console.log(`📦 Chunk received: ${blob.size} bytes, type: ${blob.type}`);
+
       if (e.data.size > 0) {
         const formData = new FormData();
         formData.append("audio", e.data);
@@ -183,7 +191,8 @@ const AudioCallRecorder = () => {
         //const uploadUrl = 'http://localhost:5000/upload' +
         const uploadUrl = 'https://f227-2409-40d2-114e-ed08-b090-7954-96d0-6a9.ngrok-free.app/upload' +
                   '?roomId=' + encodeURIComponent(roomId) +
-                  '&userId=' + encodeURIComponent(socket.id);
+                  '&userId=' + encodeURIComponent(socket.id)+
+                  '&userName=' + encodeURIComponent(userName);
         fetch(uploadUrl, {
             method: "POST",
             body: formData,
@@ -231,6 +240,14 @@ const AudioCallRecorder = () => {
             onChange={(e) => setRoomId(e.target.value)}
             placeholder="Room ID"
           />
+
+          <input
+            type="text"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="User Name"
+          />
+
           <button onClick={handleJoinRoom}>Join Room</button>
         </div>
       ) : (

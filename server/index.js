@@ -31,9 +31,11 @@ const storage = multer.diskStorage({
     // Using default 'unknown-room' and 'unknown-user' if not provided
     const roomId = req.query.roomId || "unknown-room";
     const userId = req.query.userId || "unknown-user";
-    
+
+    const userName = req.query.userName || "unknown-user";
+
     // Construct the full path using path.join for OS compatibility
-    const folder = path.join(uploadDir, roomId, userId);
+    const folder = path.join(uploadDir, roomId, userName);
     
     console.log(`[Multer Destination] Attempting to create folder: ${folder}`);
     // Ensure the specific user/room directory exists recursively
@@ -58,6 +60,7 @@ app.post("/upload", upload.single("audio"), (req, res) => {
   // Use req.query for logging userId and roomId, as they are passed in the URL
   const loggedRoomId = req.query.roomId || 'unknown-room';
   const loggedUserId = req.query.userId || 'unknown-user';
+  const loggedUserName = req.query.userName || "unknown-user";
 
   // Check if a file was actually processed by multer
   if (req.file) {
