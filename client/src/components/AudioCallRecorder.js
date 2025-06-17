@@ -180,7 +180,8 @@ const AudioCallRecorder = () => {
 
         // New:
         // const uploadUrl = `http://localhost:5000/upload?roomId=<span class="math-inline">\{encodeURIComponent\(roomId\)\}&userId\=</span>{encodeURIComponent(socket.id)}`;
-        const uploadUrl = 'http://localhost:5000/upload' +
+        //const uploadUrl = 'http://localhost:5000/upload' +
+        const uploadUrl = 'https://f227-2409-40d2-114e-ed08-b090-7954-96d0-6a9.ngrok-free.app/upload' +
                   '?roomId=' + encodeURIComponent(roomId) +
                   '&userId=' + encodeURIComponent(socket.id);
         fetch(uploadUrl, {
