@@ -1,0 +1,59 @@
+.call-container {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 2rem;
+  background: #f9f9f9;
+  min-height: 100vh;
+}
+
+.room-join input {
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+  width: 200px;
+}
+
+.room-join button {
+  padding: 10px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.videos {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.video-box {
+  width: 300px;
+  height: 200px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  object-fit: cover;
+  background: black;
+}
+
+.controls button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.record-btn {
+  background: green;
+  color: white;
+}
+
+.stop-btn {
+  background: red;
+  color: white;
+}
