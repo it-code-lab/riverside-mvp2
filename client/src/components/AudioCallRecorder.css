@@ -57,3 +57,108 @@
   background: red;
   color: white;
 }
+
+.call-container {
+  text-align: center;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+h1::before {
+  content: "🎙️";
+}
+
+.room-join input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 10px;
+  width: 220px;
+}
+
+.room-join button {
+  padding: 10px 18px;
+  font-size: 16px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.room-join button:hover {
+  background: #0056b3;
+}
+
+.videos {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.videos h4 {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.video-box {
+  width: 360px;
+  height: 270px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: black;
+  object-fit: cover;
+}
+
+.controls {
+  margin-top: 30px;
+}
+
+.record-btn, .stop-btn {
+  font-size: 16px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.record-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.record-btn:hover {
+  background-color: #218838;
+}
+
+.stop-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.stop-btn:hover {
+  background-color: #c82333;
+}
+
+.timer-display {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}

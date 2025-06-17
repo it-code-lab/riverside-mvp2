@@ -12,9 +12,15 @@ const AudioCallRecorder = () => {
   const mediaStream = useRef(null); // Initialize with null
   const recorderRef = useRef(null); // Initialize with null
   const [recording, setRecording] = useState(false);
-  const [roomId, setRoomId] = useState("");
+    const generateRoomId = () => {
+        return 'room-' + Math.random().toString(36).substring(2, 10);
+    };
+  const [roomId, setRoomId] = useState(generateRoomId());
   const [joined, setJoined] = useState(false);
   const [peerInitialized, setPeerInitialized] = useState(false); // New state to track peer setup
+
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const timerRef = useRef(null);
 
   // This effect handles signaling
   useEffect(() => {
@@ -55,6 +61,8 @@ const AudioCallRecorder = () => {
       }
     };
   }, []);
+
+
 
   const handleJoinRoom = async () => {
     if (!roomId) return;
@@ -142,6 +150,11 @@ const AudioCallRecorder = () => {
     const audioOnlyStream = new MediaStream(mediaStream.current.getAudioTracks());
     const recorder = new MediaRecorder(audioOnlyStream);
 
+    setElapsedTime(0);
+    timerRef.current = setInterval(() => {
+    setElapsedTime(prev => prev + 1);
+    }, 1000);
+
     recorder.ondataavailable = (e) => {
       if (e.data.size > 0) {
         const formData = new FormData();
@@ -176,19 +189,32 @@ const AudioCallRecorder = () => {
       recorderRef.current.stop();
       setRecording(false);
     }
+    clearInterval(timerRef.current);
+    timerRef.current = null;
   };
+
+  const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+};
 
   return (
     <div className="call-container">
-      <h1>🎙 Riverside Clone MVP</h1>
+      <h1>Clear Cast: Crystal-Clear Conversations</h1>
+
+        <h2 style={{ marginTop: "10px", fontSize: "18px", color: "#555" }}>
+        Room ID: <code>{roomId}</code>
+        </h2>
 
       {!joined ? (
         <div className="room-join">
           <input
             type="text"
             value={roomId}
+            //readOnly // Make it non-editable if you want purely auto-generated
             onChange={(e) => setRoomId(e.target.value)}
-            placeholder="Enter Room ID"
+            placeholder="Room ID"
           />
           <button onClick={handleJoinRoom}>Join Room</button>
         </div>
@@ -208,6 +234,12 @@ const AudioCallRecorder = () => {
           </div>
 
           <div className="controls">
+            {recording && (
+            <div className="timer-display">
+                ⏱ Recording: {formatTime(elapsedTime)}
+            </div>
+            )}
+
             {!recording ? (
               <button className="record-btn" onClick={startRecording}>
                 🎙 Start Audio Recording
