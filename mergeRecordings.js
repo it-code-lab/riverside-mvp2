@@ -83,7 +83,7 @@ for (const userId of userDirs) {
   fs.writeFileSync(listFilePath, concatList);
   console.log(`   List file created: ${listFilePath}`);
 
-  const outputFile = path.join(outputDir, `full-${userId}.webm`);
+  const outputFile = path.join(outputDir, `full-${userId}.wav`);
   try {
     console.log(`\n🔄 Concatenating ${validFiles.length} chunks for user: '${userId}'`);
     const cmd = `ffmpeg -y -f concat -safe 0 -i "${listFilePath}" -c copy "${outputFile}"`;
