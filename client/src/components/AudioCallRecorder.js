@@ -21,6 +21,7 @@ const AudioCallRecorder = () => {
 
   const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
+  const [muted, setMuted] = useState(false);
 
   // This effect handles signaling
   useEffect(() => {
@@ -46,11 +47,17 @@ const AudioCallRecorder = () => {
       }
     });
 
+    socket.on("stop-recording", () => {
+        console.log("⛔ Received stop-recording signal from server");
+        stopRecording(); // Your local stopRecording function
+    });
+
     // Cleanup on unmount or re-render
     return () => {
       socket.off("signal");
       socket.off("user-joined");
       socket.off("initiate-call");
+      socket.off("stop-recording");
       if (connectionRef.current) {
         connectionRef.current.destroy();
         connectionRef.current = null;
@@ -62,7 +69,13 @@ const AudioCallRecorder = () => {
     };
   }, []);
 
-
+  const toggleMute = () => {
+  const audioTracks = mediaStream.current?.getAudioTracks();
+  if (audioTracks && audioTracks.length > 0) {
+    audioTracks[0].enabled = !audioTracks[0].enabled;
+    setMuted(!muted);
+  }
+  };
 
   const handleJoinRoom = async () => {
     if (!roomId) return;
@@ -125,6 +138,7 @@ const AudioCallRecorder = () => {
 
     peer.on("connect", () => {
       console.log("🟢 Peer connected");
+      startRecording(); // auto-start recording when peer connection is ready
     });
 
     peer.on("close", () => {
@@ -240,7 +254,11 @@ const AudioCallRecorder = () => {
             </div>
             )}
 
-            {!recording ? (
+            <button onClick={toggleMute}>
+            {muted ? '🔇 Unmute Mic' : '🎙 Mute Mic'}
+            </button>
+
+            {/* {!recording ? (
               <button className="record-btn" onClick={startRecording}>
                 🎙 Start Audio Recording
               </button>
@@ -248,7 +266,7 @@ const AudioCallRecorder = () => {
               <button className="stop-btn" onClick={stopRecording}>
                 🛑 Stop Recording
               </button>
-            )}
+            )} */}
           </div>
         </>
       )}

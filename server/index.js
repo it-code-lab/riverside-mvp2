@@ -127,9 +127,16 @@ io.on("connection", (socket) => {
     const roomId = rooms[socket.id];
     if (roomId) {
       console.log(`🚪 ${socket.id} leaving room ${roomId} on disconnect.`);
+      io.to(roomId).emit("stop-recording"); // broadcast to everyone in the room
       delete rooms[socket.id]; // Remove from our custom room tracking
     }
   });
+
+  socket.on("end-session", ({ roomId }) => {
+  console.log(`📢 Ending session for room: ${roomId}`);
+  io.to(roomId).emit("stop-recording"); // broadcast to everyone in the room
+});
+
 });
 
 server.listen(5000, () => console.log("✅ Server running on http://localhost:5000"));
