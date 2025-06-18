@@ -227,18 +227,16 @@ const AudioCallRecorder = () => {
 
     return (
         <div className="call-container">
-            <h1>Clear Cast: Crystal-Clear Conversations</h1>
-
-            <h2 style={{ marginTop: "10px", fontSize: "18px", color: "#555" }}>
-                Room ID: <code>{roomId}</code>
-            </h2>
-
             {!joined ? (
-                <div className="room-join">
+                <div className="card">
+                    <h1>
+                        <span role="img" aria-label="mic">🎙</span> Clear Cast
+                    </h1>
+                    <h2>Talk Clearly. Record Instantly.</h2>
+
                     <input
                         type="text"
                         value={roomId}
-                        //readOnly // Make it non-editable if you want purely auto-generated
                         onChange={(e) => setRoomId(e.target.value)}
                         placeholder="Room ID"
                     />
@@ -253,16 +251,19 @@ const AudioCallRecorder = () => {
                     <button onClick={handleJoinRoom}>Join Room</button>
                 </div>
             ) : (
-                <>
+                <div className="in-call">
+                    <h1>
+                        <span role="img" aria-label="mic">🎙</span> Clear Cast
+                    </h1>
+                    <h2>Room ID: <code>{roomId}</code></h2>
+
                     <div className="videos">
                         <div>
                             <h4>You</h4>
-                            {/* Added playsInline */}
                             <video ref={myVideo} autoPlay muted playsInline className="video-box" />
                         </div>
                         <div>
                             <h4>Guest</h4>
-                            {/* Added playsInline */}
                             <video ref={userVideo} autoPlay playsInline className="video-box" />
                         </div>
                     </div>
@@ -270,27 +271,24 @@ const AudioCallRecorder = () => {
                     <div className="controls">
                         {recording && (
                             <div className="timer-display">
-                                ⏱ Recording: {formatTime(elapsedTime)}
+                                <span className="live-badge">
+                                    <span className="live-dot"></span> LIVE
+                                </span>
+                                {/* <div style={{ marginTop: "0.5rem", fontSize: "0.95rem", color: "#374151" }}>
+                                    ⏱ {formatTime(elapsedTime)}
+                                </div> */}
                             </div>
                         )}
+
 
                         <button onClick={toggleMute}>
                             {muted ? '🔇 Unmute Mic' : '🎙 Mute Mic'}
                         </button>
-
-                        {/* {!recording ? (
-              <button className="record-btn" onClick={startRecording}>
-                🎙 Start Audio Recording
-              </button>
-            ) : (
-              <button className="stop-btn" onClick={stopRecording}>
-                🛑 Stop Recording
-              </button>
-            )} */}
                     </div>
-                </>
+                </div>
             )}
         </div>
+
     );
 };
 
