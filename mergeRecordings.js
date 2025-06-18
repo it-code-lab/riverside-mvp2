@@ -1,3 +1,6 @@
+//DND - To Use
+// node mergeRecordings.js room-jjkr7wf2
+
 const fs = require('fs-extra');
 const path = require('path');
 const { execSync } = require('child_process');
